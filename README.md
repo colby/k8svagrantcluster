@@ -52,3 +52,12 @@ vagrant@m1:~$ sudo su kube
 kube@m1:~$ kubectl apply -f \
   https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
 ```
+
+## Docker
+
+Build a small ruby container that expects to connect and ping a Redis server at: `redis:6379`
+
+```sh
+$ docker build -t ruby-app .
+$ docker run -p 8080:8080 ruby-app
+```
