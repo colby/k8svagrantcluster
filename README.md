@@ -1,8 +1,12 @@
+# Kubernetes Sandbox
+
+## Standup master
+
 ```sh
 $ vagrant up --provision
 $ vagrant ssh
 vagrant@m1:~$ sudo kubeadm config images pull
-vagrant@m1:~$ sudo kubeadm init --apiserver-advertise-address=10.10.3.10
+vagrant@m1:~$ sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.10.3.10
 ...
 Your Kubernetes master has initialized successfully!
 ...
@@ -18,7 +22,10 @@ vagrant@m1:~$ sudo su kube
 kube@m1:~$ kubectl cluster-info
 Kubernetes master is running at https://10.10.3.10:6443
 KubeDNS is running at https://10.10.3.10:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+```
 
+## Join slaves
+```sh
 $ vagrant ssh s1
 vagrant@s1:~$ sudo kubeadm join 10.10.3.10:6443 --token foobar --discovery-token-ca-cert-hash sha256:HASH
 ...
@@ -28,10 +35,20 @@ This node has joined the cluster:
 
 Run 'kubectl get nodes' on the master to see this node join the cluster.
 
+$ vagrant ssh s2
+vagrant@s2:~$ sudo kubeadm join 10.10.3.10:6443 --token foobar --discovery-token-ca-cert-hash sha256:HASH
+...
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the master to see this node join the cluster.
+```
+
+## Plugins
+```sh
 $ vagrant ssh
 vagrant@m1:~$ sudo su kube
-kube@m1:~$ kubectl get nodes
-NAME   STATUS     ROLES    AGE     VERSION
-m1     NotReady   master   9m6s    v1.13.2
-s1     NotReady   <none>   3m40s   v1.13.2
+kube@m1:~$ kubectl apply -f \
+  https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
 ```
