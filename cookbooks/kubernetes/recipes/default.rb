@@ -5,3 +5,4 @@
 
 include_recipe 'kubernetes::install'
 include_recipe 'kubernetes::configure'
+include_recipe 'kubernetes::helm'
