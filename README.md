@@ -149,5 +149,7 @@ deployment.apps/ruby-app-deployment created
 ```
 
 ## Misc commands
+
 Run containers on master node (remove taints): `kubectl taint nodes --all node-role.kubernetes.io/master-`
+
 Remove all stopped or unused containers and images: `docker system prune -a`
