@@ -22,6 +22,7 @@ Vagrant.configure(2) do |config|
   config.vm.define 'm1', primary: true do |n|
     n.vm.network 'private_network', ip: '10.10.3.10'
     n.vm.hostname = 'm1'
+    n.vm.synced_folder 'manifests', '/manifests'
   end
 
   config.vm.define 's1' do |n|

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruby-app-deployment
+  labels:
+    app: ruby-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ruby-app
+  template:
+    metadata:
+      labels:
+        app: ruby-app
+    spec:
+      containers:
+      - name: ruby-app
+        image: 10.10.3.1:5000/ruby-app
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
