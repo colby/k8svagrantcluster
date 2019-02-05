@@ -63,6 +63,15 @@ Kubernetes master is running at https://10.10.3.10:6443
 KubeDNS is running at https://10.10.3.10:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 ```
 
+### Create intra-pod networking
+
+```sh
+$ vagrant ssh
+vagrant@m1:~$ sudo su kube
+kube@m1:~$ kubectl apply -f \
+ https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+```
+
 ### Join slaves
 ```sh
 $ vagrant ssh s1
@@ -84,15 +93,6 @@ This node has joined the cluster:
 Run 'kubectl get nodes' on the master to see this node join the cluster.
 ```
 
-### Create intra-pod networking
-
-```sh
-$ vagrant ssh
-vagrant@m1:~$ sudo su kube
-kube@m1:~$ kubectl apply -f \
- https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
-```
-
 ### Create application deployment
 
 ```sh
@@ -104,3 +104,4 @@ deployment.apps/ruby-app-deployment created
 
 ## Misc commands
 Run containers on master node (remove taints): `kubectl taint nodes --all node-role.kubernetes.io/master-`
+Remove all stopped or unused containers and images: `docker system prune -a`
