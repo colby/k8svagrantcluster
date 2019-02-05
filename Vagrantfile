@@ -12,6 +12,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = 'ubuntu/xenial64'
 
+  # NOTE: make the banner shut up
+  config.vm.provision 'shell', inline: 'sudo chmod -R -x /etc/update-motd.d'
+
   config.vm.provision 'chef_solo' do |chef|
     chef.add_recipe 'kubernetes'
   end
