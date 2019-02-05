@@ -30,7 +30,3 @@ execute 'disable swap on boot' do
   # NOTE: comment out any active swap files from fstab
   only_if 'grep swap /etc/fstab | grep ^[^#]'
 end
-
-sysctl 'net.bridge.bridge-nf-call-iptables' do
-  value 1
-end

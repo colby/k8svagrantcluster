@@ -19,10 +19,6 @@ apt_package node['kubernetes']['packages'] do
   action [:install, :lock]
 end
 
-service 'docker' do
-  action [:start, :enable]
-end
-
 # NOTE: kubelet will constantly restart prior to kubeadm init
 service 'kubelet' do
   action [:start, :enable]
