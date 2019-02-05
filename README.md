@@ -7,7 +7,6 @@
 Run a private Docker Image registry on the host machine. 
 
 ```sh
-$ mkdir -p registry
 $ docker run -d \
   -p 5000:5000 \
   --restart=always \
@@ -103,4 +102,5 @@ kube@m1:~$ kubectl create -f /manifests --recursive
 deployment.apps/ruby-app-deployment created
 ```
 
-`kubectl taint nodes --all node-role.kubernetes.io/master-`
+## Misc commands
+Run containers on master node (remove taints): `kubectl taint nodes --all node-role.kubernetes.io/master-`
