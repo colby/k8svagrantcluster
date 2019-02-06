@@ -1,5 +1,11 @@
 # Kubernetes Sandbox
 
+To Do:
+* Include host machine for DNS searches
+* Override REDIS_ENV for a deployment
+* Template out yamls for unique deployments
+* Provide unique URL per deployments
+
 ## Docker
 
 ### Registry
@@ -119,6 +125,7 @@ kube@m1:~$ kubectl apply -f \
 ```
 
 ### Join slaves
+
 ```sh
 $ vagrant ssh s1
 vagrant@s1:~$ sudo kubeadm join 10.10.3.10:6443 --token foobar --discovery-token-ca-cert-hash sha256:HASH
@@ -153,3 +160,5 @@ deployment.apps/ruby-app-deployment created
 Run containers on master node (remove taints): `kubectl taint nodes --all node-role.kubernetes.io/master-`
 
 Remove all stopped or unused containers and images: `docker system prune -a`
+
+Attach a shell to a running pod: `kubectl exec -it ruby-app-deployment-58db4bdc5b-sqpz2 -- /bin/sh`
