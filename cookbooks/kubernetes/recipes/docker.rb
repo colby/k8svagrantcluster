@@ -15,10 +15,12 @@ file '/etc/docker/daemon.json' do
   notifies :restart, 'service[docker]', :immediately
 end
 
-# NOTE: pass bridged IPv4/6 traffic to iptables chains
 sysctls = {
+  # NOTE: pass bridged IPv4/6 traffic to iptables chains
+  'net.bridge.bridge-nf-call-ip6tables' => 1,
   'net.bridge.bridge-nf-call-iptables' => 1,
-  'net.bridge.bridge-nf-call-ip6tables' => 1
+  # NOTE: docker sets this already, containerd does not
+  'net.ipv4.ip_forward' => 1
 }
 
 sysctls.each do |key, val|
