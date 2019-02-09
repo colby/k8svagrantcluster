@@ -5,6 +5,7 @@ To Do:
 * Override REDIS_ENV for a deployment
 * Template out yamls for unique deployments
 * Provide unique URL per deployments
+* Fix `mesg: ttyname failed: Inappropriate ioctl for device` error in `./boot.sh`
 
 ## Docker
 
