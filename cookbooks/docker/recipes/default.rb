@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: kubernetes
-# Recipe:: docker
+# Cookbook Name:: docker
+# Recipe:: default
 #
 
 apt_package node['docker']['packages']

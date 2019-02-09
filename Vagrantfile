@@ -17,6 +17,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision 'shell', inline: 'chmod -R -x /etc/update-motd.d'
 
   config.vm.provision 'chef_solo' do |chef|
+    chef.add_recipe 'docker'
     chef.add_recipe 'kubernetes'
   end
 

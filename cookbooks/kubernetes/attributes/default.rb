@@ -1,8 +1,8 @@
-node.default['docker']['packages'] = %w(docker.io)
-node.default['kubernetes']['user'] = 'kube'
-node.default['kubernetes']['group'] = 'kube'
-node.default['kubernetes']['packages'] = %w(
+default['kubernetes']['group'] = 'kube'
+default['kubernetes']['helm'] = false
+default['kubernetes']['packages'] = %w(
   kubeadm
   kubectl
   kubelet
 )
+default['kubernetes']['user'] = 'kube'
