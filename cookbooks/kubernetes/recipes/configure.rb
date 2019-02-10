@@ -3,7 +3,8 @@
 # Recipe:: configure
 #
 
-# NOTE: kubelet wants to use enp0s3, we want to use enp0s8
+# NOTE: this is an issue between vagrant and kubernetes
+# kubelet wants to use enp0s3, we want to use enp0s8
 # https://github.com/kubernetes/kubernetes/issues/44702
 file '/etc/default/kubelet' do
   content "KUBELET_EXTRA_ARGS=--node-ip=#{node['network']['interfaces']['enp0s8']['addresses'].keys[1]}"
