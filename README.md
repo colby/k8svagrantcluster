@@ -39,7 +39,7 @@ Build a small ruby container on the host machine and push to private registry.
 
 Our ruby application:
 * listens for http on `*:8080`
-* expects to connect and ping a Redis server at: `redis.default.svc.cluster.local:6379`
+* expects to connect and ping a Redis server at: `redis:6379`
 
 ```
 $ docker build -t ruby-app .
