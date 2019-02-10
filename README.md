@@ -119,11 +119,14 @@ KubeDNS is running at https://10.10.3.10:6443/api/v1/namespaces/kube-system/serv
 
 ### Create intra-pod networking
 
+Using [flannel](https://github.com/coreos/flannel).
+
 ```sh
 $ vagrant ssh
 vagrant@m1:~$ sudo su kube
-kube@m1:~$ kubectl apply -f \
- https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+kube@m1:~$ wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kube@m1:~$ sed -i '/- --ip-masq/a\        - --iface=enp0s8' kube-flannel.yml
+kube@m1:~$ kubectl apply -f kube-flannel.yml
 ```
 
 ### Join slaves
@@ -171,13 +174,24 @@ ruby-app-deployment-58db4bdc5b-lq55s   1/1     Running   0          8m2s
 ruby-app-deployment-58db4bdc5b-qdpk9   1/1     Running   0          8m2s
 
 kube@m1:~$ kubectl get services
-NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-kubernetes         ClusterIP   10.96.0.1       <none>        443/TCP    13m
-redis              ClusterIP   10.97.226.237   <none>        6379/TCP   3m21s
-ruby-app-service   ClusterIP   10.105.34.59    <none>        80/TCP     8m24s
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+kubernetes         ClusterIP   10.96.0.1        <none>        443/TCP    12m
+redis              ClusterIP   10.108.230.57    <none>        6379/TCP   11m
+ruby-app-service   ClusterIP   10.106.118.239   <none>        80/TCP     11m
 
-kube@m1:~$ curl 10.105.34.59
+kube@m1:~$ curl 10.106.118.239
 PONG
+
+kube@m1:~$ kubectl scale --replicas=0 deployment redis
+deployment.extensions/redis scaled
+
+kube@m1:~$ kubectl get pods
+NAME                                   READY   STATUS    RESTARTS   AGE
+ruby-app-deployment-58db4bdc5b-r6jrv   1/1     Running   0          14s
+ruby-app-deployment-58db4bdc5b-xf947   1/1     Running   0          10m
+
+kube@m1:~$ curl 10.106.118.239
+error: Error connecting to Redis on redis:6379 (Errno::ECONNREFUSED)
 ```
 
 ## Misc commands
