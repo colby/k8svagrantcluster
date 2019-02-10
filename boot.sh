@@ -8,16 +8,12 @@ vagrant ssh m1 -- "
 echo \">>> Becoming root and running kubeadm init\"
 
 sudo su - root <<EOF
-kubeadm config images pull
-kubeadm init \
-	--pod-network-cidr=10.244.0.0/16 \
-       	--apiserver-advertise-address=10.10.3.10 \
-	 | tee /root/kubeadm-init.output
+kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.10.3.10 | tee /root/kubeadm-init.output
 
 echo \">>> Copying configs for kube user\"
 mkdir -p /home/kube/.kube
 cp -i /etc/kubernetes/admin.conf /home/kube/.kube/config
-chown -R kube:kube /home/kube/.kube/config
+chown -R kube:kube /home/kube/.kube
 EOF
 
 echo \">>> Becoming kube and running kubectl to start networking\"
