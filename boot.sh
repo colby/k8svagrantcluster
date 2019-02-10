@@ -1,6 +1,6 @@
 #!/bin/bash
 
-vagrant up m1 s1 --provision
+vagrant up --provision
 
 echo ">>> Starting to stand up Kubernetes cluster"
 
@@ -27,9 +27,9 @@ EOF
 
 JOIN_CMD=$(vagrant ssh m1 -- "sudo tail -n2 /root/kubeadm-init.output")
 
-echo ">>> Joining s1 into Kubernetes cluster"
+echo ">>> Joining slaves into Kubernetes cluster"
 
 vagrant ssh s1 -- "eval 'sudo $JOIN_CMD'"
-# vagrant ssh s2 -- "eval 'sudo $JOIN_CMD'"
+vagrant ssh s2 -- "eval 'sudo $JOIN_CMD'"
 
 echo ">>> DONE"
