@@ -154,7 +154,30 @@ Run 'kubectl get nodes' on the master to see this node join the cluster.
 $ vagrant ssh m1
 vagrant@m1:~$ sudo su kube
 kube@m1:~$ kubectl create -f /manifests --recursive
+deployment.apps/redis created
+service/redis created
 deployment.apps/ruby-app-deployment created
+service/ruby-app-service created
+```
+
+### Validate
+
+```sh
+kube@m1:~$ kubectl get pods
+NAME                                   READY   STATUS    RESTARTS   AGE
+redis-59879f974f-lhkf5                 1/1     Running   0          8m2s
+redis-59879f974f-vf2zw                 1/1     Running   0          8m2s
+ruby-app-deployment-58db4bdc5b-lq55s   1/1     Running   0          8m2s
+ruby-app-deployment-58db4bdc5b-qdpk9   1/1     Running   0          8m2s
+
+kube@m1:~$ kubectl get services
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+kubernetes         ClusterIP   10.96.0.1       <none>        443/TCP    13m
+redis              ClusterIP   10.97.226.237   <none>        6379/TCP   3m21s
+ruby-app-service   ClusterIP   10.105.34.59    <none>        80/TCP     8m24s
+
+kube@m1:~$ curl 10.105.34.59
+PONG
 ```
 
 ## Misc commands
