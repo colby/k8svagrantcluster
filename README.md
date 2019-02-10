@@ -1,6 +1,7 @@
 # Kubernetes Sandbox
 
 To Do:
+* Use namespaces
 * Include host machine for DNS searches
 * Override REDIS_ENV for a deployment
 * Template out yamls for unique deployments
