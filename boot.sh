@@ -19,8 +19,9 @@ EOF
 echo \">>> Becoming kube and running kubectl to start networking\"
 
 sudo su - kube <<EOF
-kubectl apply -f \
-	 https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+sed -i '/- --ip-masq/a\        - --iface=enp0s8' kube-flannel.yml
+kubectl apply -f kube-flannel.yml
 EOF
 "
 
