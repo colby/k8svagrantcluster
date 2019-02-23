@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: ruby-app-service
 spec:
+  type: LoadBalancer
   selector:
     app: ruby-app
   ports:

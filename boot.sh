@@ -23,6 +23,10 @@ echo \">>> Installing Flannel networking\"
 wget https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
 sed -i '/- --ip-masq/a\        - --iface=enp0s8' kube-flannel.yml
 kubectl apply -f kube-flannel.yml
+
+echo \">>> Installing MetalLB\"
+kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
+kubectl apply -f /manifests/metallb-configmap.yaml
 EOF
 "
 

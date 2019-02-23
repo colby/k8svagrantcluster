@@ -109,14 +109,24 @@ Kubernetes master is running at https://10.10.3.10:6443
 KubeDNS is running at https://10.10.3.10:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 ```
 
-### Create intra-pod networking
-
-Using [flannel](https://github.com/coreos/flannel).
+### Create L2 networking
+Using [MetalLB](https://github.com/google/metallb) for Layer 2 networking for load balancers.
 
 ```sh
 $ vagrant ssh
 vagrant@m1:~$ sudo su kube
-kube@m1:~$ wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kube@m1:~$ kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
+kube@m1:~$ kubectl apply -f /manifests/metallb-configmap.yaml
+```
+
+### Create L3 networking
+
+Using [Flannel](https://github.com/coreos/flannel) for Layer 3 networking between Kubernetes pods.
+
+```sh
+$ vagrant ssh
+vagrant@m1:~$ sudo su kube
+kube@m1:~$ wget https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
 kube@m1:~$ sed -i '/- --ip-masq/a\        - --iface=enp0s8' kube-flannel.yml
 kube@m1:~$ kubectl apply -f kube-flannel.yml
 ```
