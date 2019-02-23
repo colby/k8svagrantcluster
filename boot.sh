@@ -16,10 +16,11 @@ cp -i /etc/kubernetes/admin.conf /home/kube/.kube/config
 chown -R kube:kube /home/kube/.kube
 EOF
 
-echo \">>> Becoming kube and running kubectl to start networking\"
+echo \">>> Becoming kube user\"
 
 sudo su - kube <<EOF
-wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+echo \">>> Installing Flannel networking\"
+wget https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
 sed -i '/- --ip-masq/a\        - --iface=enp0s8' kube-flannel.yml
 kubectl apply -f kube-flannel.yml
 EOF
