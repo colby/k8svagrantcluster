@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ruby-app-service
+  name: ruby-app
 spec:
   type: LoadBalancer
   selector:
