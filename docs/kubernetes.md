@@ -4,8 +4,7 @@
 
 ```sh
 $ vagrant ssh m1
-vagrant@m1:~$ sudo kubeadm config images pull
-vagrant@m1:~$ sudo kubeadm init --config=/manifests/kubeadm-config.yaml
+vagrant@m1:~$ sudo kubeadm init --config=/manifests/kubeadm-config.yaml | tee /tmp/kubeadm-init.output
 ...
 Your Kubernetes master has initialized successfully!
 ...
@@ -28,7 +27,9 @@ Using [MetalLB](https://github.com/google/metallb) for Layer 2 networking for lo
 ```sh
 $ vagrant ssh m1
 vagrant@m1:~$ sudo su kube
-kube@m1:~$ kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
+kube@m1:~$ cd /tmp
+kube@m1:~$ wget --no-verbose https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
+kube@m1:~$ kubectl apply -f metallb.yaml
 kube@m1:~$ kubectl apply -f /manifests/metallb-configmap.yaml
 ```
 
@@ -39,12 +40,18 @@ Using [Flannel](https://github.com/coreos/flannel) for Layer 3 networking betwee
 ```sh
 $ vagrant ssh m1
 vagrant@m1:~$ sudo su kube
-kube@m1:~$ wget https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
+kube@m1:~$ cd /tmp
+kube@m1:~$ wget --no-verbose https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
 kube@m1:~$ sed -i '/- --ip-masq/a\        - --iface=enp0s8' kube-flannel.yml
 kube@m1:~$ kubectl apply -f kube-flannel.yml
 ```
 
 ### Join slaves
+
+```sh
+$ vagrant ssh m1 -c "grep 'kubeadm join' /tmp/kubeadm-init.output"
+  kubeadm join 10.10.3.5:6443  --token foobar --discovery-token-ca-cert-hash sha256:HASH
+```
 
 ```sh
 $ vagrant ssh s1

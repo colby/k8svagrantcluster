@@ -43,4 +43,3 @@ ruby-app-58db4bdc5b-xf947              1/1     Running   0          10m
 kube@m1:~$ curl 10.106.118.239
 error: Error connecting to Redis on redis:6379 (Errno::ECONNREFUSED)
 ```
-

@@ -7,7 +7,6 @@ vagrant up --provision
 echo ">>> Starting to stand up Kubernetes cluster"
 
 vagrant ssh m1 -- "
-set -e
 echo \">>> Becoming root and running kubeadm init\"
 
 sudo su - root <<EOF
