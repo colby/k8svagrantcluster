@@ -7,7 +7,7 @@ package 'apt-transport-https'
 
 apt_repository 'kubernetes' do
   uri           'https://apt.kubernetes.io/'
-  distribution  "kubernetes-#{node['lsb']['codename']}"
+  distribution  node['kubernetes']['distribution']
   components    ['main']
   key           'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
   action        :add
