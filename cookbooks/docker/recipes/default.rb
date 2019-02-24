@@ -12,7 +12,7 @@ end
 # NOTE: private docker registry on host is not running HTTPS
 file '/etc/docker/daemon.json' do
   content '{ "insecure-registries" : ["10.10.3.1:5000"] }'
-  notifies :restart, 'service[docker]', :immediately
+  notifies :restart, 'service[docker]', :delayed
 end
 
 sysctls = {
@@ -26,5 +26,6 @@ sysctls = {
 sysctls.each do |key, val|
   sysctl key do
     value val
+    notifies :restart, 'service[docker]', :delayed
   end
 end
