@@ -8,7 +8,7 @@
 # https://github.com/kubernetes/kubernetes/issues/44702
 file '/etc/default/kubelet' do
   content "KUBELET_EXTRA_ARGS=--node-ip=#{node['network']['interfaces']['enp0s8']['addresses'].keys[1]}"
-  notifies :restart, 'service[kubelet]', :immediately
+  notifies :restart, 'service[kubelet]', :delayed
 end
 
 group node['kubernetes']['group']
