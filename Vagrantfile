@@ -1,39 +1,36 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+nodes = [
+  { :name => 'm1', :ip => '10.10.3.10', :sync => true, :roles => %w(docker kubernetes keepalived), },
+  { :name => 'm2', :ip => '10.10.3.11', :sync => true, :roles => %w(docker kubernetes keepalived), },
+  { :name => 's1', :ip => '10.10.3.20', :roles => %w(docker kubernetes), },
+  { :name => 's2', :ip => '10.10.3.21', :roles => %w(docker kubernetes), }
+]
+
 Vagrant.configure(2) do |config|
-  config.vm.provider 'virtualbox' do |v|
-    v.linked_clone     = true
-    v.default_nic_type = 'virtio'
-    v.customize        [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]
-    v.memory           = 2024
-    v.cpus             = 2
+  config.vm.provider 'virtualbox' do |vm|
+    vm.linked_clone     = true
+    vm.default_nic_type = 'virtio'
+    vm.customize        [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]
+    vm.memory           = 2024
+    vm.cpus             = 2
   end
 
-  # config.vm.box = 'ubuntu/bionic64'
-  config.vm.box = 'ubuntu/xenial64'
+  config.vm.box = 'ubuntu/bionic64'
+  # config.vm.box = 'ubuntu/xenial64'
 
-  # NOTE: make the banner shut up
-  config.vm.provision 'shell', inline: 'chmod -R -x /etc/update-motd.d'
+  # NOTE: silence motd
+  config.vm.provision 'shell', inline: 'chmod -fR -x /etc/update-motd.d /usr/share/landscape/landscape-sysinfo.wrapper'
 
-  config.vm.provision 'chef_solo' do |chef|
-    chef.add_recipe 'docker'
-    chef.add_recipe 'kubernetes'
-  end
-
-  config.vm.define 'm1', primary: true do |n|
-    n.vm.network 'private_network', ip: '10.10.3.10'
-    n.vm.hostname = 'm1'
-    n.vm.synced_folder 'manifests', '/manifests'
-  end
-
-  config.vm.define 's1' do |n|
-    n.vm.network 'private_network', ip: '10.10.3.11'
-    n.vm.hostname = 's1'
-  end
-
-  config.vm.define 's2' do |n|
-    n.vm.network 'private_network', ip: '10.10.3.12'
-    n.vm.hostname = 's2'
+  nodes.each do |node|
+    config.vm.define node[:name] do |n|
+      n.vm.network 'private_network', ip: node[:ip]
+      n.vm.synced_folder 'manifests', '/manifests' if node[:sync]
+      n.vm.hostname = node[:name]
+      n.vm.provision 'chef_solo' do |chef|
+	node[:roles].each { |role| chef.add_recipe role }
+      end
+    end
   end
 end
