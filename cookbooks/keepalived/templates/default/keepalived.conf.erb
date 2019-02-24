@@ -1,0 +1,27 @@
+! Chef generated, all edits will be lost
+
+vrrp_script check_kubernetes {
+  script '/etc/keepalived/check_kubernetes'
+  interval 1
+  fall 2
+  rise 2
+  weight 50
+}
+
+vrrp_instance <%= node['keepalived']['instance_name'] %> {
+  state MASTER
+  interface <%= node['keepalived']['interface'] %>
+  virtual_router_id <%= node['keepalived']['virtual_router_id'] %>
+  priority <%= node['keepalived']['priority'] %>
+  advert_int 1
+  authentication {
+    auth_type PASS
+    auth_pass <%= node['keepalived']['authentication_password'] %>
+  }
+  virtual_ipaddress {
+    <%= node['keepalived']['virtual_ipaddress'] %>
+  }
+  track_script {
+    check_kubernetes
+  }
+}
