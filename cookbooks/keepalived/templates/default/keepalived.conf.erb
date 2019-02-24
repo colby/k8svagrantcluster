@@ -1,7 +1,8 @@
 ! Chef generated, all edits will be lost
 
 vrrp_script check_kubernetes {
-  script '/etc/keepalived/check_kubernetes'
+  script "/bin/nc -vw0 127.0.0.1 6443"
+  user "root"
   interval 1
   fall 2
   rise 2
