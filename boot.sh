@@ -11,7 +11,7 @@ set -e
 echo \">>> Becoming root and running kubeadm init\"
 
 sudo su - root <<EOF
-kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.10.3.10 | tee /root/kubeadm-init.output
+kubeadm init --config=/manifests/kubeadm-config.yaml | tee /root/kubeadm-init.output
 
 echo \">>> Copying configs for kube user\"
 mkdir -p /home/kube/.kube
@@ -22,8 +22,10 @@ EOF
 echo \">>> Becoming kube user\"
 
 sudo su - kube <<EOF
+cd /tmp
 echo \">>> Installing MetalLB\"
-kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
+wget --no-verbose https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
+kubectl apply -f metallb.yaml
 kubectl apply -f /manifests/metallb-configmap.yaml
 
 echo \">>> Installing Flannel networking\"
