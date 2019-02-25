@@ -11,6 +11,12 @@ file '/etc/default/kubelet' do
   notifies :restart, 'service[kubelet]', :delayed
 end
 
+# NOTE: this is *still* the issue from above, but now using yaml with kubeadm disregards $KUBELET_EXTRA_ARGS
+execute 'resolve hostname to correct address' do
+  command "sudo sed -i 's/127.0.0.1\t#{node['hostname']}/127.0.0.2\#{node['hostname']}/' /etc/hosts"
+  only_if 'grep 10.10.3 /etc/hosts'
+end
+
 group node['kubernetes']['group']
 
 user node['kubernetes']['user'] do
