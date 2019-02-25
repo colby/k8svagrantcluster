@@ -10,7 +10,7 @@ vagrant ssh m1 -- "
 echo \">>> Becoming root and running kubeadm init\"
 
 sudo su - root <<EOF
-kubeadm init --config=/manifests/kubeadm-config.yaml | tee /root/kubeadm-init.output
+kubeadm init --config=/manifests/system/kubeadm-config.yaml | tee /root/kubeadm-init.output
 
 echo \">>> Copying configs for kube user\"
 mkdir -p /home/kube/.kube
@@ -25,7 +25,7 @@ cd /tmp
 echo \">>> Installing MetalLB\"
 wget --no-verbose https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
 kubectl apply -f metallb.yaml
-kubectl apply -f /manifests/metallb-configmap.yaml
+kubectl apply -f /manifests/system/metallb-configmap.yaml
 
 echo \">>> Installing Flannel networking\"
 wget --no-verbose https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml

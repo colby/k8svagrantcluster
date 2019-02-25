@@ -4,7 +4,7 @@
 
 ```sh
 $ vagrant ssh m1
-vagrant@m1:~$ sudo kubeadm init --config=/manifests/kubeadm-config.yaml | tee /tmp/kubeadm-init.output
+vagrant@m1:~$ sudo kubeadm init --config=/manifests/system/kubeadm-config.yaml | tee /tmp/kubeadm-init.output
 ...
 Your Kubernetes master has initialized successfully!
 ...
@@ -21,7 +21,7 @@ Kubernetes master is running at https://10.10.3.5:6443
 KubeDNS is running at https://10.10.3.5:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 ```
 
-### Create L2 networking
+#### Create L2 networking
 Using [MetalLB](https://github.com/google/metallb) for Layer 2 networking for load balancers.
 
 ```sh
@@ -30,10 +30,10 @@ vagrant@m1:~$ sudo su kube
 kube@m1:~$ cd /tmp
 kube@m1:~$ wget --no-verbose https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
 kube@m1:~$ kubectl apply -f metallb.yaml
-kube@m1:~$ kubectl apply -f /manifests/metallb-configmap.yaml
+kube@m1:~$ kubectl apply -f /manifests/system/metallb-configmap.yaml
 ```
 
-### Create L3 networking
+#### Create L3 networking
 
 Using [Flannel](https://github.com/coreos/flannel) for Layer 3 networking between Kubernetes pods.
 

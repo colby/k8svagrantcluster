@@ -5,7 +5,7 @@
 ```sh
 $ vagrant ssh m1
 vagrant@m1:~$ sudo su kube
-kube@m1:~$ kubectl create -f /manifests --recursive
+kube@m1:~$ kubectl create -f /manifests/application --recursive
 deployment.apps/redis created
 service/redis created
 deployment.apps/ruby-app created
